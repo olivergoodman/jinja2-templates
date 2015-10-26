@@ -7,18 +7,19 @@ from app import app
 def index():
    page_title = 'Oliver Goodman' 
    title = 'Home'
+   print 'index was called'
    return render_template('index.html',
                           title = title,
                           page_title = page_title)
 
 
-# #how to load new page (contact) ??
-# @app.route('/contact')
-# def contact():
-# 	page_title = 'Contact'
-# 	return render_template('contact.html',
-# 							title = 'Oliver Goodman | Contact'
-# 							page_title = page_title)
+#how to load new page (contact) ??
+@app.route('/contact')
+def contact():
+	page_title = 'Contact'
+	return render_template('contact.html',
+							title = 'Oliver Goodman | Contact',
+							page_title = page_title)
 
 
 ##example stuff
