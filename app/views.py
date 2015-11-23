@@ -1,79 +1,39 @@
 from flask import Flask, render_template
 from app import app
-import sqlite3
+from flask.ext.sqlalchemy import SQLAlchemy
 
 #---------------------DB-------------------------
-conn = sqlite3.connect('page_hits.db')
-print "Opened database successfully";
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+db = SQLAlchemy(app)
 
-# #creating table
-# conn.execute('''CREATE TABLE PAGEHITS
-#        (NAME  TEXT  NOT NULL,
-#        HITS   INT PRIMARY KEY   NOT NULL);''')
-# print "Table created successfully";
+class Page(db.Model):
+    page_name = db.Column(db.String(80), unique=True)
+    page_hits = db.Column(db.Integer, primary_key=True)
 
-#adding entries
-# conn.execute("INSERT INTO PAGEHITS (NAME, HITS) \
-#       VALUES ('Home', 0)");
+    def __init__(self, page_hits, page_name):
+        self.page_name = page_name
+        self.page_hits = page_hits
 
-# conn.execute("INSERT INTO PAGEHITS (NAME, HITS) \
-#       VALUES ('Contact', 0)");
-
-# conn.commit()
-# print "Records created successfully";
-
-#displaying
-def displayTable():
-  cursor = conn.execute("SELECT name, hits  from PAGEHITS")
-  for row in cursor:
-    print "NAME = ", row[0]
-    print "HITS = ", row[1], "\n"
-
-def incrementHomeHits():
-  conn.execute("UPDATE PAGEHITS SET HITS = HITS + 1 WHERE NAME = Home")
-
-def incrementContactHits():
-  conn.execute("UPDATE PAGEHITS SET HITS = HITS + 1 WHERE NAME = Contact")
-
+    def __repr__(self):
+        return '<Page Title %r>' % self.page_name
 #----------------------------------------------
   
 @app.route('/')
 @app.route('/index')
 
 def index():
-  page_title = 'Oliver Goodman' 
+  page_name = 'Oliver Goodman' 
   title = 'Home'
   print 'index was called'
-  incrementHomeHits()
-  displayTable()
   return render_template('index.html',
                           title = title,
-                          page_title = page_title)
+                          page_name = page_name)
 
 @app.route('/contact')
 def contact(): 
-  incrementContactHits()
-  displayTable()
-  page_title = 'Contact'
+  page_name = 'Contact'
   return render_template('contact.html',
 							title = 'Oliver Goodman | Contact',
-							page_title = page_title)
+							page_name = page_name)
 
-
-##example stuff
-# def index():
-#     user = {'nickname': 'Miguel'}  # fake user
-#     posts = [  # fake array of posts
-#         { 
-#             'author': {'nickname': 'John'}, 
-#             'body': 'Beautiful day in Portland!' 
-#         },
-#         { 
-#             'author': {'nickname': 'Susan'}, 
-#             'body': 'The Avengers movie was so cool!' 
-#         }
-#     ]
-#     return render_template("index.html",
-#                            title='Home',
-#                            user=user,
-#                            posts=posts)
