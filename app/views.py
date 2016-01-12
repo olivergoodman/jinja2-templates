@@ -41,6 +41,7 @@ def incrementContactHits():
 @app.route('/index')
 
 def index():
+<<<<<<< HEAD
   page_title = 'Oliver Goodman' 
   title = 'Home'
   print 'index was called'
@@ -58,6 +59,22 @@ def contact():
   return render_template('contact.html',
 							title = 'Oliver Goodman | Contact',
 							page_title = page_title)
+=======
+   page_title = 'Oliver Goodman' 
+   title = 'Home'
+   return render_template('index.html',
+                          title = title,
+                          page_title = page_title)
+
+
+# #how to load new page (contact) ??
+# @app.route('/contact')
+# def contact():
+# 	page_title = 'Contact'
+# 	return render_template('contact.html',
+# 							title = 'Oliver Goodman | Contact'
+# 							page_title = page_title)
+>>>>>>> parent of 63a9316... links now route to appropriate templates when clicked
 
 
 ##example stuff
